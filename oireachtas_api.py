@@ -35,17 +35,6 @@ def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
         if any(sponsor['sponsor']['by']['showAs'] == sponsor_name for sponsor in bill['bill']['sponsors'])
     ]
 
-    # ret = []
-
-    # for res in leg['results']:
-    #     p = res['bill']['sponsors']
-    #     for i in p:
-    #         name = i['sponsor']['by']['showAs']
-    #         for result in mem['results']:
-    #             fname = result['member']['fullName']
-    #             rpId = result['member']['pId']
-    #             if fname == name and rpId == pId:
-    #                 ret.append(res['bill'])
     return ret
 
 def fetch_data_from_api(url):
@@ -62,7 +51,6 @@ def fetch_data_from_api(url):
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return None
-
 
 
 def filter_bills_by_last_updated(since, until):
@@ -109,7 +97,7 @@ if __name__ == "__main__":
 
     # Capture the finish time
     finish_time = datetime.now()
-    # Calculate the duration (optional)
+    # Calculate the duration
     duration = finish_time - start_time
     print(f"Duration: {duration}")
 
