@@ -6,36 +6,9 @@ https://api.oireachtas.ie/v1/
 """
 import os
 from json import *
-from datetime import *
 import requests
-from datetime import datetime, date
-import time  
+from datetime import datetime, date 
 
-
-def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
-    """Return bills sponsored by the member with the specified pId
-
-    :param str pId: The pId value for the member
-    :return: dict of bill records
-    :rtype: dict
-    """
-
-    mem = fetch_data_from_api(url_members)
-    leg = fetch_data_from_api(url_legistaltion)
-
-    members_dict = {member['member']['pId']: member['member']['fullName'] for member in mem['results']}
-
-    sponsor_name = members_dict.get(pId)
-
-    if not sponsor_name:
-        return []
-    
-    ret = [
-        bill['bill'] for bill in leg['results']
-        if any(sponsor['sponsor']['by']['showAs'] == sponsor_name for sponsor in bill['bill']['sponsors'])
-    ]
-
-    return ret
 
 def fetch_data_from_api(url):
     try:
@@ -53,6 +26,40 @@ def fetch_data_from_api(url):
         return None
 
 
+def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
+    """Return bills sponsored by the member with the specified pId
+
+    :param str url_members: URL to fetch member data
+    :param str url_legislation: URL to fetch legislation data
+    :param str pId: The pId value for the member
+    :return: List of bill records sponsored by the member
+    :rtype: list
+    """
+
+    # Fetch member and legislation data
+    mem = fetch_data_from_api(url_members)
+    leg = fetch_data_from_api(url_legistaltion)
+
+    # Check if data was successfully fetched
+    if mem is None or leg is None:
+        return []
+
+    # Create a dictionary of members for quick lookup
+    members_dict = {member['member']['pId']: member['member']['fullName'] for member in mem['results']}
+    sponsor_name = members_dict.get(pId)
+
+    if not sponsor_name:
+        print(f"No member found with pId: {pId}")
+        return []
+    
+    ret = [
+        bill['bill'] for bill in leg['results']
+        if any(sponsor['sponsor']['by']['showAs'] == sponsor_name for sponsor in bill['bill']['sponsors'])
+    ]
+
+    return ret
+
+
 def filter_bills_by_last_updated(since, until):
     """Return bills updated within the specified date range
 
@@ -67,18 +74,17 @@ def filter_bills_by_last_updated(since, until):
     """
     url_legislation = "https://api.oireachtas.ie/v1/legislation"
     leg = fetch_data_from_api(url_legislation)
-    # print(leg.keys())
 
+    # Check if data was successfully fetched
+    if leg is None:
+        return []
+    
     if until is None:
         until = date.today()
 
     # Convert input dates to datetime.date if they are not already
-    if isinstance(since, datetime):
-        since = since.date()
-    if isinstance(until, datetime):
-        until = until.date()
-    
-    # print(since , " to ",until)
+    since = since.date() if isinstance(since, datetime) else since
+    until = until.date() if isinstance(until, datetime) else until
 
     # Initialize an empty list to hold bills that match the criteria
     filtered_bills = []
@@ -86,19 +92,16 @@ def filter_bills_by_last_updated(since, until):
     # Iterate through the bills
     for res in leg['results']:
         bill = res['bill']
-        # print(bill.keys())
-        last_updated_str = bill['lastUpdated']  # Assuming this is a string in ISO format
-        
+        last_updated_str = bill['lastUpdated']
+
         # Convert the lastUpdated string to a datetime.date object
         last_updated_date = datetime.fromisoformat(last_updated_str).date()
-        # print(last_updated_date)
         
         # Check if the lastUpdated date falls within the range
         if since <= last_updated_date <= until:
             filtered_bills.append(bill)
     
     return filtered_bills
-    # raise NotImplementedError
 
 
 if __name__ == "__main__":
@@ -121,11 +124,16 @@ if __name__ == "__main__":
     pId : MickBarry
 
     """
+
     pId = "MickBarry"
+    
+    # Define URLs for member and legislation data
     url_members = "https://api.oireachtas.ie/v1/members"
     url_legislation = "https://api.oireachtas.ie/v1/legislation"
 
+
     print("____________________________Tasks One and Two implementation_________________________")
+    
     # Capture the start time
     start_time = datetime.now()
 
@@ -133,14 +141,19 @@ if __name__ == "__main__":
 
     # Capture the finish time
     finish_time = datetime.now()
+    
     # Calculate the duration
     duration = finish_time - start_time
+    
     print(f"Duration: {duration}")
 
-    print(len(result))
+    for res in result:
+        print(res["billNo"])
 
     """____________________________Task Three driver code_________________________"""
+    
     print("____________________________Task Three implementation_________________________")
+    
     # Defining the date range for filtering
     since_date = datetime(2024, 9, 30)  # January 1, 2019
     until_date = datetime(2024, 11, 1) # December 31, 2019
