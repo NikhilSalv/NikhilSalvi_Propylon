@@ -10,12 +10,6 @@ from datetime import *
 import requests
 
 
-LEGISLATION_DATASET = 'legislation.json'
-# MEMBERS_DATASET = 'members.json'
-
-
-load = lambda jfname: loads(open(jfname).read())
-
 def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
     """Return bills sponsored by the member with the specified pId
 
@@ -23,24 +17,6 @@ def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
     :return: dict of bill records
     :rtype: dict
     """
-    # leg = load(LEGISLATION_DATASET)
-    # mem = load(MEMBERS_DATASET)
-
-    # try:        
-    #     # Send a GET request to the API
-    #     response = requests.get(url_members)
-    
-    #     # Raise an exception for HTTP errors
-    #     response.raise_for_status()
-    
-    #     # Parse the JSON response
-    #     mem = response.json()
-    
-    #     # Print the fetched data (or process it as needed)
-    #     # print(data.keys())
-
-    # except requests.exceptions.RequestException as e:
-    #     print(f"An error occurred: {e}")
 
     mem = fetch_data_from_api(url_members)
     leg = fetch_data_from_api(url_legistaltion)
@@ -90,7 +66,24 @@ def filter_bills_by_last_updated(since, until):
 
 
 if __name__ == "__main__":
-    pId = "CatherineArdagh"
+
+    """ * For the offline data, there are two members who have sponsored bills :
+    1. Ivana Bacik,
+    pId : IvanaBacik
+
+    2. Mick Barry
+    pId : MickBarry
+
+    
+    * And for the updated data from API, there are two members who have sponsored bills :
+    1. Catherine Ardagh,
+    pId : CatherineArdagh
+
+    2. Mick Barry
+    pId : MickBarry
+
+    """
+    pId = "MickBarry"
     url_members = "https://api.oireachtas.ie/v1/members"
     url_legislation = "https://api.oireachtas.ie/v1/legislation"
 
