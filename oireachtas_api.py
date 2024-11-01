@@ -8,7 +8,7 @@ import os
 from json import *
 from datetime import *
 import requests
-from datetime import datetime
+from datetime import datetime, date
 import time  
 
 
@@ -65,10 +65,45 @@ def filter_bills_by_last_updated(since, until):
     :rtype: list
 
     """
-    raise NotImplementedError
+    url_legislation = "https://api.oireachtas.ie/v1/legislation"
+    leg = fetch_data_from_api(url_legislation)
+    # print(leg.keys())
+
+    if until is None:
+        until = date.today()
+
+    # Convert input dates to datetime.date if they are not already
+    if isinstance(since, datetime):
+        since = since.date()
+    if isinstance(until, datetime):
+        until = until.date()
+    
+    # print(since , " to ",until)
+
+    # Initialize an empty list to hold bills that match the criteria
+    filtered_bills = []
+
+    # Iterate through the bills
+    for res in leg['results']:
+        bill = res['bill']
+        # print(bill.keys())
+        last_updated_str = bill['lastUpdated']  # Assuming this is a string in ISO format
+        
+        # Convert the lastUpdated string to a datetime.date object
+        last_updated_date = datetime.fromisoformat(last_updated_str).date()
+        # print(last_updated_date)
+        
+        # Check if the lastUpdated date falls within the range
+        if since <= last_updated_date <= until:
+            filtered_bills.append(bill)
+    
+    return filtered_bills
+    # raise NotImplementedError
 
 
 if __name__ == "__main__":
+
+    """____________________________Tasks One and Two driver code_________________________"""
 
     """ * For the offline data, there are two members who have sponsored bills :
     1. Ivana Bacik,
@@ -90,6 +125,7 @@ if __name__ == "__main__":
     url_members = "https://api.oireachtas.ie/v1/members"
     url_legislation = "https://api.oireachtas.ie/v1/legislation"
 
+    print("____________________________Tasks One and Two implementation_________________________")
     # Capture the start time
     start_time = datetime.now()
 
@@ -101,5 +137,17 @@ if __name__ == "__main__":
     duration = finish_time - start_time
     print(f"Duration: {duration}")
 
-
     print(len(result))
+
+    """____________________________Task Three driver code_________________________"""
+    print("____________________________Task Three implementation_________________________")
+    # Defining the date range for filtering
+    since_date = datetime(2024, 9, 30)  # January 1, 2019
+    until_date = datetime(2024, 11, 1) # December 31, 2019
+
+    # Calling the function with the date range
+    bills_updated = filter_bills_by_last_updated(since_date, until_date)
+
+    # Printing the bill numbers in the filtered bills
+    for bill in bills_updated:
+        print(bill['billNo'])
