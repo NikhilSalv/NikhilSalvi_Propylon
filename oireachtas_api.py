@@ -8,6 +8,8 @@ import os
 from json import *
 from datetime import *
 import requests
+from datetime import datetime
+import time  
 
 
 def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
@@ -21,16 +23,29 @@ def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
     mem = fetch_data_from_api(url_members)
     leg = fetch_data_from_api(url_legistaltion)
 
-    ret = []
-    for res in leg['results']:
-        p = res['bill']['sponsors']
-        for i in p:
-            name = i['sponsor']['by']['showAs']
-            for result in mem['results']:
-                fname = result['member']['fullName']
-                rpId = result['member']['pId']
-                if fname == name and rpId == pId:
-                    ret.append(res['bill'])
+    members_dict = {member['member']['pId']: member['member']['fullName'] for member in mem['results']}
+
+    sponsor_name = members_dict.get(pId)
+
+    if not sponsor_name:
+        return []
+    
+    ret = [
+        bill['bill'] for bill in leg['results']
+        if any(sponsor['sponsor']['by']['showAs'] == sponsor_name for sponsor in bill['bill']['sponsors'])
+    ]
+
+    # ret = []
+
+    # for res in leg['results']:
+    #     p = res['bill']['sponsors']
+    #     for i in p:
+    #         name = i['sponsor']['by']['showAs']
+    #         for result in mem['results']:
+    #             fname = result['member']['fullName']
+    #             rpId = result['member']['pId']
+    #             if fname == name and rpId == pId:
+    #                 ret.append(res['bill'])
     return ret
 
 def fetch_data_from_api(url):
@@ -87,5 +102,16 @@ if __name__ == "__main__":
     url_members = "https://api.oireachtas.ie/v1/members"
     url_legislation = "https://api.oireachtas.ie/v1/legislation"
 
+    # Capture the start time
+    start_time = datetime.now()
+
     result = filter_bills_sponsored_by(url_members, url_legislation, pId)
+
+    # Capture the finish time
+    finish_time = datetime.now()
+    # Calculate the duration (optional)
+    duration = finish_time - start_time
+    print(f"Duration: {duration}")
+
+
     print(len(result))
