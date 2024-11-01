@@ -16,32 +16,34 @@ LEGISLATION_DATASET = 'legislation.json'
 
 load = lambda jfname: loads(open(jfname).read())
 
-def filter_bills_sponsored_by(url_members,pId):
+def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
     """Return bills sponsored by the member with the specified pId
 
     :param str pId: The pId value for the member
     :return: dict of bill records
     :rtype: dict
     """
-    leg = load(LEGISLATION_DATASET)
+    # leg = load(LEGISLATION_DATASET)
     # mem = load(MEMBERS_DATASET)
 
-    try:        
-        # Send a GET request to the API
-        response = requests.get(url_members)
+    # try:        
+    #     # Send a GET request to the API
+    #     response = requests.get(url_members)
     
-        # Raise an exception for HTTP errors
-        response.raise_for_status()
+    #     # Raise an exception for HTTP errors
+    #     response.raise_for_status()
     
-        # Parse the JSON response
-        mem = response.json()
+    #     # Parse the JSON response
+    #     mem = response.json()
     
-        # Print the fetched data (or process it as needed)
-        # print(data.keys())
+    #     # Print the fetched data (or process it as needed)
+    #     # print(data.keys())
 
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
+    # except requests.exceptions.RequestException as e:
+    #     print(f"An error occurred: {e}")
 
+    mem = fetch_data_from_api(url_members)
+    leg = fetch_data_from_api(url_legistaltion)
 
     ret = []
     for res in leg['results']:
@@ -54,6 +56,22 @@ def filter_bills_sponsored_by(url_members,pId):
                 if fname == name and rpId == pId:
                     ret.append(res['bill'])
     return ret
+
+def fetch_data_from_api(url):
+    try:
+        # Send a GET request to the API
+        response = requests.get(url)
+        
+        # Raise an exception for HTTP errors
+        response.raise_for_status()
+        
+        # Parse the JSON response and return it
+        return response.json()
+    
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
+
 
 
 def filter_bills_by_last_updated(since, until):
@@ -72,8 +90,9 @@ def filter_bills_by_last_updated(since, until):
 
 
 if __name__ == "__main__":
-    pId = "IvanaBacik"
+    pId = "CatherineArdagh"
     url_members = "https://api.oireachtas.ie/v1/members"
+    url_legislation = "https://api.oireachtas.ie/v1/legislation"
 
-    result = filter_bills_sponsored_by(url_members,pId)
+    result = filter_bills_sponsored_by(url_members, url_legislation, pId)
     print(len(result))
