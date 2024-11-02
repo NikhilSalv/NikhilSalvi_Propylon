@@ -1,10 +1,20 @@
-2024-11-02 22:16:19,366 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
-2024-11-02 22:16:19,366 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
-2024-11-02 22:16:19,366 - INFO - Using cached data.
-2024-11-02 22:16:19,369 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
-2024-11-02 22:16:19,369 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
-2024-11-02 22:16:19,369 - INFO - Using cached data.
-2024-11-02 22:16:19,369 - INFO - Duration for the data fetching and query run: 0:00:00.004284
-2024-11-02 22:16:19,374 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
-2024-11-02 22:16:19,374 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
-2024-11-02 22:16:19,374 - INFO - Using cached data.
+2024-11-02 22:56:51,010 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-02 22:56:51,010 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-02 22:56:51,010 - INFO - Using cached data for members
+2024-11-02 22:56:51,012 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:56:51,012 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:56:51,012 - INFO - Using cached data for legislation
+2024-11-02 22:56:51,012 - INFO - Bills sponsored by the member with given pId fetched
+2024-11-02 22:56:51,012 - INFO - Duration for the data fetching and query run: 0:00:00.003738
+2024-11-02 22:56:51,012 - ERROR - Invalid data type https://api.oireachtas.ie/v1/legislation
+2024-11-02 22:57:22,998 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-02 22:57:22,998 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-02 22:57:22,998 - INFO - Using cached data for members
+2024-11-02 22:57:23,001 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:57:23,001 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:57:23,001 - INFO - Using cached data for legislation
+2024-11-02 22:57:23,001 - INFO - Bills sponsored by the member with given pId fetched
+2024-11-02 22:57:23,001 - INFO - Duration for the data fetching and query run: 0:00:00.003777
+2024-11-02 22:57:23,004 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:57:23,004 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:57:23,004 - INFO - Using cached data for legislation

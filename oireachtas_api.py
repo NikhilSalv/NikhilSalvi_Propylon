@@ -21,6 +21,10 @@ CACHE_EXPIRATION = timedelta(hours=1)  # Cache duration is one hour
 
 CACHE_MEMBERS_FILE = 'api_cache_members.json'
 CACHE_LEGISLATION_FILE = 'api_cache_legislation.json'
+url_mapping = {
+    "members": ("https://api.oireachtas.ie/v1/members", CACHE_MEMBERS_FILE),
+    "legislation": ("https://api.oireachtas.ie/v1/legislation", CACHE_LEGISLATION_FILE)
+}
 
 
 def is_cache_valid(cache_time):
@@ -29,16 +33,14 @@ def is_cache_valid(cache_time):
     return current_time - cache_time < CACHE_EXPIRATION
 
 
-def fetch_data_from_api_with_cache(url):
-    """Fetch data from the API and use file-based caching."""
-    base_url = "https://api.oireachtas.ie/v1/"
 
-    if url == url_members:
-        cache_file = CACHE_MEMBERS_FILE
-    elif url == url_legislation:
-        cache_file = CACHE_LEGISLATION_FILE
-    else:
-        raise ValueError("Invalid URL")
+def fetch_data_from_api_with_cache(data_type):
+    """Fetch data from the API and use file-based caching."""
+    if data_type not in url_mapping:
+        logger.error(f"Invalid data type {data_type}")
+        raise ValueError("Invalid data type")
+
+    url, cache_file = url_mapping[data_type]
 
     # Check if the cache file exists
     if os.path.exists(cache_file):
@@ -54,14 +56,14 @@ def fetch_data_from_api_with_cache(url):
 
         if cached_url == current_url and is_cache_valid(
                 datetime.fromisoformat(cached_data['timestamp'])):
-            logger.info("Using cached data.")
+            logger.info(f"Using cached data for {data_type}")
             return cached_data['data']
         else:
-            logger.info("Cache is expired or URL has changed. Fetching new data.")
+            print("Cache is expired or URL has changed. Fetching new data.")
 
     # Fetch data from the API
     try:
-        logger.info("Fetching data from API.")
+        print("Fetching data from API.")
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()
@@ -77,7 +79,7 @@ def fetch_data_from_api_with_cache(url):
         return data
 
     except requests.exceptions.RequestException as e:
-        logger.error(f"An error occurred: {e}")
+        print(f"An error occurred: {e}")
         return None
 
 
@@ -139,8 +141,8 @@ def filter_bills_by_last_updated(since, until):
     :return: List of bill records
     :rtype: list
     """
-    url_legislation = "https://api.oireachtas.ie/v1/legislation"
-    leg = fetch_data_from_api_with_cache(url_legislation)
+    # url_legislation = "https://api.oireachtas.ie/v1/legislation"
+    leg = fetch_data_from_api_with_cache("legislation")
 
     # Check if data was successfully fetched
     if leg is None:
@@ -182,18 +184,17 @@ if __name__ == "__main__":
     # Capture the start time
     start_time = datetime.now()
 
-    mem = fetch_data_from_api_with_cache(url_members)
-    leg = fetch_data_from_api_with_cache(url_legislation)
+    mem = fetch_data_from_api_with_cache("members")
+    leg = fetch_data_from_api_with_cache("legislation")
 
     if mem and leg:
-        # Create a members dictionary once
-        # members_dict = create_members_dict(mem)
 
         # Example usage
         pId = "MickBarry"
         results = filter_bills_sponsored_by(pId)
 
         if results:
+            logger.info("Bills sponsored by the member with given pId fetched")
             print("Bills sponsored by the member:")
             for bill in results:
                 print(bill["billNo"])
