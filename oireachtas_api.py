@@ -18,6 +18,9 @@ def filter_bills_sponsored_by(pId):
     :rtype: list
     """
 
+    mem = fetch_data_from_api_with_cache("members")
+    leg = fetch_data_from_api_with_cache("legislation")
+
     members_dict = create_members_dict(mem)
     sponsor_name = members_dict.get(pId)
 
@@ -84,25 +87,17 @@ if __name__ == "__main__":
     # Capture the start time
     start_time = datetime.now()
 
-    mem = fetch_data_from_api_with_cache("members")
-    leg = fetch_data_from_api_with_cache("legislation")
+    # Example usage
+    pId = "MickBarry"
+    results = filter_bills_sponsored_by(pId)
 
-    if mem and leg:
-
-        # Example usage
-        pId = "MickBarry"
-        results = filter_bills_sponsored_by(pId)
-
-        if results:
-            logger.info("Bills sponsored by the member with given pId fetched")
-            print("Bills sponsored by the member:")
-            for bill in results:
-                print(bill["billNo"])
-        else:
-            print(f"No bills found sponsored by member with pId: {pId}")
-
+    if results:
+        logger.info("Bills sponsored by the member with given pId are fetched")
+        print("Bills sponsored by the member:")
+        for bill in results:
+            print(bill["billNo"])
     else:
-        logger.error("Failed to fetch the necessary data.")
+        print(f"No bills found sponsored by member with pId: {pId}")
 
     # Capture the finish time
     finish_time = datetime.now()
@@ -125,10 +120,13 @@ if __name__ == "__main__":
         bills_updated = filter_bills_by_last_updated(since_date, until_date)
 
         # Printing the bill numbers in the filtered bills
-        print(
-            f"Bills dated from {since_date.date()} to "
-            f"{until_date.date()} are:")
-        for bill in bills_updated:
-            print(bill["billNo"])
+        if bills_updated:
+            logger.info(f"Bills between {since_date.date()} and {until_date.date()} are fetched")
+            print(
+                f"Bills dated from {since_date.date()} to "
+                f"{until_date.date()} are:")
+            for bill in bills_updated:
+                print(bill["billNo"])
     except ValueError as e:
+        logger.error("Invalid date format")
         print(f"Error: {e}")
