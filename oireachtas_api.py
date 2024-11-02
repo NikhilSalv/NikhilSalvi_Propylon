@@ -5,9 +5,60 @@ Set of functions to query the Oireachtas api at
 https://api.oireachtas.ie/v1/
 """
 import os
+import json
 from json import *
 import requests
-from datetime import datetime, date 
+from datetime import datetime, date, timedelta
+
+
+CACHE_FILE = 'api_cache.json'
+CACHE_EXPIRATION = timedelta(hours=1) # Cache duration is one hour
+
+
+def is_cache_valid(cache_time):
+    """Check if the cache is still valid based on the expiration duration."""
+
+    current_time = datetime.now()
+    return current_time - cache_time < CACHE_EXPIRATION
+
+
+def fetch_data_from_api_with_cache(url):
+    """Fetch data from the API and use file-based caching."""
+    # Check if the cache file exists
+    if os.path.exists(CACHE_FILE):
+        with open(CACHE_FILE, 'r') as f:
+            cached_data = json.load(f)
+        
+        # Check if the cached data is for the same URL and if the cache is valid
+        print("Condition 1 is : " , cached_data['url'] == url)
+        print(url)
+        print(cached_data['url'])
+        if cached_data['url'] == url and is_cache_valid(datetime.fromisoformat(cached_data['timestamp'])):
+            print("Using cached data.")
+            return cached_data['data']
+        else:
+            print("Cache is expired or URL has changed. Fetching new data.")
+
+    # Fetch data from the API
+    try:
+        print("Fetching data from API.")
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        # Write data to the cache file with metadata
+        with open(CACHE_FILE, 'w') as f:
+            json.dump({
+                'url': url,
+                'timestamp': datetime.now().isoformat(),
+                'data': data
+            }, f)
+        
+        return data
+    
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
 
 
 def fetch_data_from_api(url):
@@ -31,7 +82,6 @@ def create_members_dict(member_data):
     return {member['member']['pId']: member['member']['fullName'] for member in member_data['results']}
 
 
-
 def filter_bills_sponsored_by(pId):
     """Return bills sponsored by the member with the specified pId
 
@@ -48,12 +98,12 @@ def filter_bills_sponsored_by(pId):
         print(f"No member found with pId: {pId}")
         return []
     
-    ret = [
+    sponsored_bills = [
         bill['bill'] for bill in leg['results']
         if any(sponsor['sponsor']['by']['showAs'] == sponsor_name for sponsor in bill['bill']['sponsors'])
     ]
 
-    return ret
+    return sponsored_bills
 
 
 def filter_bills_by_last_updated(since, until):
@@ -129,19 +179,29 @@ if __name__ == "__main__":
     start_time = datetime.now()
 
     # Fetch member and legislation data
-    mem = fetch_data_from_api(url_members)
-    leg = fetch_data_from_api(url_legislation)
+    # mem = fetch_data_from_api(url_members)
+    # leg = fetch_data_from_api(url_legislation)
+
+    mem = fetch_data_from_api_with_cache(url_members)
+    leg = fetch_data_from_api_with_cache(url_legislation)
 
     if mem and leg:
         # Create a members dictionary once
         members_dict = create_members_dict(mem)
         
         # Example usage
-        pId = "CatherineArdagh"
-        result = filter_bills_sponsored_by(pId)
-        
-        for res in result:
-            print(res)
+        pId = "MickBarry"
+        results = filter_bills_sponsored_by(pId)
+
+        if results:
+            print("Bills sponsored by the member:")
+            for bill in results:
+                print(bill)
+        else:
+            print(f"No bills found sponsored by member with pId: {pId}")
+
+    else:
+        print("Failed to fetch the necessary data.")
 
     # Capture the finish time
     finish_time = datetime.now()
@@ -154,8 +214,8 @@ if __name__ == "__main__":
     """____________________________Task Three driver code_________________________"""
     
     # Defining the date range for filtering
-    since_date = datetime(2024, 9, 30)  # January 1, 2019
-    until_date = datetime(2024, 11, 1) # December 31, 2019
+    since_date = datetime(2024, 9, 30)  # September 30, 2024
+    until_date = datetime(2024, 11, 1) # November 1, 2024
 
     # # Calling the function with the date range
     # bills_updated = filter_bills_by_last_updated(since_date, until_date)
