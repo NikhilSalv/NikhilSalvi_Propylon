@@ -13,6 +13,8 @@ from datetime import datetime, date, timedelta
 
 CACHE_FILE = 'api_cache.json'
 CACHE_EXPIRATION = timedelta(hours=1) # Cache duration is one hour
+CACHE_MEMBERS_FILE = 'api_cache_members.json'
+CACHE_LEGISLATION_FILE = 'api_cache_legislation.json'
 
 
 def is_cache_valid(cache_time):
@@ -24,16 +26,26 @@ def is_cache_valid(cache_time):
 
 def fetch_data_from_api_with_cache(url):
     """Fetch data from the API and use file-based caching."""
+    if url == url_members:
+        cache_file = CACHE_MEMBERS_FILE
+    elif url == url_legislation:
+        cache_file = CACHE_LEGISLATION_FILE
+    else:
+        raise ValueError("Invalid URL")
+
     # Check if the cache file exists
-    if os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'r') as f:
+    if os.path.exists(cache_file):
+        with open(cache_file, 'r') as f:
             cached_data = json.load(f)
-        
-        # Check if the cached data is for the same URL and if the cache is valid
-        print("Condition 1 is : " , cached_data['url'] == url)
-        print(url)
-        print(cached_data['url'])
-        if cached_data['url'] == url and is_cache_valid(datetime.fromisoformat(cached_data['timestamp'])):
+
+        # Normalize URLs for comparison
+        current_url = url.strip()
+        cached_url = cached_data['url'].strip()
+
+        print(f"Current URL: '{current_url}'")
+        print(f"Cached URL: '{cached_url}'")
+
+        if cached_url == current_url and is_cache_valid(datetime.fromisoformat(cached_data['timestamp'])):
             print("Using cached data.")
             return cached_data['data']
         else:
@@ -47,15 +59,15 @@ def fetch_data_from_api_with_cache(url):
         data = response.json()
 
         # Write data to the cache file with metadata
-        with open(CACHE_FILE, 'w') as f:
+        with open(cache_file, 'w') as f:
             json.dump({
                 'url': url,
                 'timestamp': datetime.now().isoformat(),
                 'data': data
             }, f)
-        
+
         return data
-    
+
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return None
@@ -184,6 +196,7 @@ if __name__ == "__main__":
 
     mem = fetch_data_from_api_with_cache(url_members)
     leg = fetch_data_from_api_with_cache(url_legislation)
+
 
     if mem and leg:
         # Create a members dictionary once
