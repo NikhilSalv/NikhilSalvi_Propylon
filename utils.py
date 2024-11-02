@@ -23,13 +23,24 @@ url_mapping = {
 
 
 def is_cache_valid(cache_time):
-    """Check if the cache is still valid based on the expiration duration."""
+    """Check if the cache is still valid based on the expiration duration.
+
+    :param datetime cache_time: The timestamp of when the cache was created, as a datetime object.
+    :return: True if the cache is valid (i.e., not expired), False otherwise.
+    :rtype: bool
+    """
     current_time = datetime.now()
     return current_time - cache_time < CACHE_EXPIRATION
 
 
 def fetch_data_from_api_with_cache(data_type):
-    """Fetch data from the API and use file-based caching."""
+    """Fetch data from the API and use file-based caching to avoid repeated requests.
+
+    :param str data_type: The type of data to fetch (e.g., 'members' or 'legislation').
+    :raises ValueError: If the provided data type is not found in the URL mapping.
+    :return: The data from the cache or fetched from the API if the cache is expired or does not exist.
+    :rtype: dict or None
+    """
     if data_type not in url_mapping:
         logger.error(f"Invalid data type {data_type}")
         raise ValueError("Invalid data type")
@@ -80,13 +91,27 @@ def fetch_data_from_api_with_cache(data_type):
 
 
 def create_members_dict(member_data):
-    """Create a dictionary of member data for quick lookup."""
+    """Create a dictionary of member data for quick lookup by member ID.
+
+    :param dict member_data: The data containing member details, typically a response from the API.
+    :return: A dictionary with member IDs (pId) as keys and member full names as values.
+    :rtype: dict
+    """
     return {member['member']['pId']: member['member']['fullName']
             for member in member_data['results']}
 
 
 def validate_dates(since, until):
-    """Validate and sanitize date inputs."""
+    """Validate and sanitize date inputs to ensure they are in the correct format and logical order.
+
+    :param since: The starting date of the range, should be a datetime or date object.
+    :type since: datetime or date
+    :param until: The ending date of the range, should be a datetime or date object.
+    :type until: datetime or date
+    :raises ValueError: If the provided `since` or `until` is not a valid date or datetime instance, 
+                        or if `since` is later than `until`.
+    :return: None
+    """
     # Ensure both dates are either datetime or date instances
     if not isinstance(since, (datetime, date)):
         raise ValueError(
@@ -97,6 +122,7 @@ def validate_dates(since, until):
 
     # Ensure since is not after until
     if since > until:
+        logger.warning("Invalid date range")
         raise ValueError(
             f"Invalid date range: 'since' date {since} "
             f"cannot be after 'until' date {until}.")
