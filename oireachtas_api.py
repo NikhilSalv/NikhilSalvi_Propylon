@@ -1,25 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Set of functions to query the Oireachtas api at
+Set of functions to query the Oireachtas API at
 https://api.oireachtas.ie/v1/
 """
 import os
 import json
-from json import *
 import requests
 from datetime import datetime, date, timedelta
 
 
 CACHE_FILE = 'api_cache.json'
-CACHE_EXPIRATION = timedelta(hours=1) # Cache duration is one hour
+CACHE_EXPIRATION = timedelta(hours=1)  # Cache duration is one hour
+
 CACHE_MEMBERS_FILE = 'api_cache_members.json'
 CACHE_LEGISLATION_FILE = 'api_cache_legislation.json'
 
 
 def is_cache_valid(cache_time):
     """Check if the cache is still valid based on the expiration duration."""
-
     current_time = datetime.now()
     return current_time - cache_time < CACHE_EXPIRATION
 
@@ -45,7 +44,8 @@ def fetch_data_from_api_with_cache(url):
         print(f"Current URL: '{current_url}'")
         print(f"Cached URL: '{cached_url}'")
 
-        if cached_url == current_url and is_cache_valid(datetime.fromisoformat(cached_data['timestamp'])):
+        if cached_url == current_url and is_cache_valid(
+                datetime.fromisoformat(cached_data['timestamp'])):
             print("Using cached data.")
             return cached_data['data']
         else:
@@ -74,29 +74,28 @@ def fetch_data_from_api_with_cache(url):
 
 
 def create_members_dict(member_data):
-    """Create a dictionary of member data for quick lookup"""
-    return {member['member']['pId']: member['member']['fullName'] for member in member_data['results']}
+    """Create a dictionary of member data for quick lookup."""
+    return {member['member']['pId']: member['member']['fullName']
+            for member in member_data['results']}
 
 
 def filter_bills_sponsored_by(pId):
-    """Return bills sponsored by the member with the specified pId
+    """Return bills sponsored by the member with the specified pId.
 
-    :param str url_members: URL to fetch member data
-    :param str url_legislation: URL to fetch legislation data
     :param str pId: The pId value for the member
     :return: List of bill records sponsored by the member
     :rtype: list
     """
-
     sponsor_name = members_dict.get(pId)
 
     if not sponsor_name:
         print(f"No member found with pId: {pId}")
         return []
-    
+
     sponsored_bills = [
         bill['bill'] for bill in leg['results']
-        if any(sponsor['sponsor']['by']['showAs'] == sponsor_name for sponsor in bill['bill']['sponsors'])
+        if any(sponsor['sponsor']['by']['showAs'] == sponsor_name
+               for sponsor in bill['bill']['sponsors'])
     ]
 
     return sponsored_bills
@@ -106,18 +105,21 @@ def validate_dates(since, until):
     """Validate and sanitize date inputs."""
     # Ensure both dates are either datetime or date instances
     if not isinstance(since, (datetime, date)):
-        raise ValueError(f"Invalid since date: {since}. Must be a datetime or date object.")
+        raise ValueError(
+            f"Invalid since date: {since}. Must be a datetime or date object.")
     if not isinstance(until, (datetime, date)):
-        raise ValueError(f"Invalid until date: {until}. Must be a datetime or date object.")
+        raise ValueError(
+            f"Invalid until date: {until}. Must be a datetime or date object.")
 
     # Ensure since is not after until
     if since > until:
-        raise ValueError(f"Invalid date range: 'since' date {since} cannot be after 'until' date {until}.")
-
+        raise ValueError(
+            f"Invalid date range: 'since' date {since} "
+            f"cannot be after 'until' date {until}.")
 
 
 def filter_bills_by_last_updated(since, until):
-    """Return bills updated within the specified date range
+    """Return bills updated within the specified date range.
 
     :param datetime.date since: The lastUpdated value for the bill
         should be greater than or equal to this date
@@ -126,7 +128,6 @@ def filter_bills_by_last_updated(since, until):
         will default to today's date
     :return: List of bill records
     :rtype: list
-
     """
     url_legislation = "https://api.oireachtas.ie/v1/legislation"
     leg = fetch_data_from_api_with_cache(url_legislation)
@@ -134,7 +135,7 @@ def filter_bills_by_last_updated(since, until):
     # Check if data was successfully fetched
     if leg is None:
         return []
-    
+
     if until is None:
         until = date.today()
 
@@ -152,35 +153,18 @@ def filter_bills_by_last_updated(since, until):
 
         # Convert the lastUpdated string to a datetime.date object
         last_updated_date = datetime.fromisoformat(last_updated_str).date()
-        
+
         # Check if the lastUpdated date falls within the range
         if since <= last_updated_date <= until:
             filtered_bills.append(bill)
-    
+
     return filtered_bills
 
 
 if __name__ == "__main__":
 
-    """____________________________Tasks One and Two driver code_________________________"""
+    """_______________Tasks One and Two driver code_____________"""
 
-    """ * For the offline data, there are two members who have sponsored bills :
-    1. Ivana Bacik,
-    pId : IvanaBacik
-
-    2. Mick Barry
-    pId : MickBarry
-
-    
-    * And for the updated data from API, there are two members who have sponsored bills :
-    1. Catherine Ardagh,
-    pId : CatherineArdagh
-
-    2. Mick Barry
-    pId : MickBarry
-
-    """
-    
     # Define URLs for member and legislation data
     url_members = "https://api.oireachtas.ie/v1/members"
     url_legislation = "https://api.oireachtas.ie/v1/legislation"
@@ -191,19 +175,17 @@ if __name__ == "__main__":
     mem = fetch_data_from_api_with_cache(url_members)
     leg = fetch_data_from_api_with_cache(url_legislation)
 
-
     if mem and leg:
         # Create a members dictionary once
         members_dict = create_members_dict(mem)
-        
+
         # Example usage
         pId = "MickBarry"
         results = filter_bills_sponsored_by(pId)
 
         if results:
-            print("Bills sponsored by the member: ")
+            print("Bills sponsored by the member:")
             for bill in results:
-                # print(bill)
                 print(bill["billNo"])
         else:
             print(f"No bills found sponsored by member with pId: {pId}")
@@ -213,30 +195,30 @@ if __name__ == "__main__":
 
     # Capture the finish time
     finish_time = datetime.now()
-    
+
     # Calculate the duration
     duration = finish_time - start_time
-    
-    print(f"Duration for the data fetching and query run : {duration}")
 
-    """____________________________Task Three driver code_________________________"""
-    
+    print(f"Duration for the data fetching and query run: {duration}")
+
+    """_____________________Task Three driver code________________"""
+
     # Defining the date range for filtering
-    since_date = datetime(2024, 9, 30)  # September 30, 2024
-    until_date = datetime(2024, 11, 1) # November 1, 2024
+    since_date = datetime(2024, 9, 30)
+    until_date = datetime(2024, 11, 1)
 
     try:
-    # Validate the dates before calling the function
+        # Validate the dates before calling the function
         validate_dates(since_date, until_date)
 
-    # Calling the function with the date range
+        # Calling the function with the date range
         bills_updated = filter_bills_by_last_updated(since_date, until_date)
 
-    # Printing the bill numbers in the filtered bills
-
-        print(f"Bills dated from {since_date.date()} to {until_date.date()} are :")
+        # Printing the bill numbers in the filtered bills
+        print(
+            f"Bills dated from {since_date.date()} to " 
+            f"{until_date.date()} are:")
         for bill in bills_updated:
-            # print(bill)
             print(bill["billNo"])
     except ValueError as e:
         print(f"Error: {e}")
