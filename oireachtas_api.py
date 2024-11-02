@@ -102,6 +102,20 @@ def filter_bills_sponsored_by(pId):
     return sponsored_bills
 
 
+def validate_dates(since, until):
+    """Validate and sanitize date inputs."""
+    # Ensure both dates are either datetime or date instances
+    if not isinstance(since, (datetime, date)):
+        raise ValueError(f"Invalid since date: {since}. Must be a datetime or date object.")
+    if not isinstance(until, (datetime, date)):
+        raise ValueError(f"Invalid until date: {until}. Must be a datetime or date object.")
+
+    # Ensure since is not after until
+    if since > until:
+        raise ValueError(f"Invalid date range: 'since' date {since} cannot be after 'until' date {until}.")
+
+
+
 def filter_bills_by_last_updated(since, until):
     """Return bills updated within the specified date range
 
@@ -115,7 +129,7 @@ def filter_bills_by_last_updated(since, until):
 
     """
     url_legislation = "https://api.oireachtas.ie/v1/legislation"
-    leg = fetch_data_from_api(url_legislation)
+    leg = fetch_data_from_api_with_cache(url_legislation)
 
     # Check if data was successfully fetched
     if leg is None:
@@ -187,9 +201,10 @@ if __name__ == "__main__":
         results = filter_bills_sponsored_by(pId)
 
         if results:
-            print("Bills sponsored by the member:")
+            print("Bills sponsored by the member: ")
             for bill in results:
-                print(bill)
+                # print(bill)
+                print(bill["billNo"])
         else:
             print(f"No bills found sponsored by member with pId: {pId}")
 
@@ -210,9 +225,18 @@ if __name__ == "__main__":
     since_date = datetime(2024, 9, 30)  # September 30, 2024
     until_date = datetime(2024, 11, 1) # November 1, 2024
 
+    try:
+    # Validate the dates before calling the function
+        validate_dates(since_date, until_date)
+
     # Calling the function with the date range
-    bills_updated = filter_bills_by_last_updated(since_date, until_date)
+        bills_updated = filter_bills_by_last_updated(since_date, until_date)
 
     # Printing the bill numbers in the filtered bills
-    for bill in bills_updated:
-        print(bill)
+
+        print(f"Bills dated from {since_date.date()} to {until_date.date()} are :")
+        for bill in bills_updated:
+            # print(bill)
+            print(bill["billNo"])
+    except ValueError as e:
+        print(f"Error: {e}")
