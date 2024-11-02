@@ -10,7 +10,6 @@ import requests
 from datetime import datetime, date, timedelta
 
 
-CACHE_FILE = 'api_cache.json'
 CACHE_EXPIRATION = timedelta(hours=1)  # Cache duration is one hour
 
 CACHE_MEMBERS_FILE = 'api_cache_members.json'
@@ -216,7 +215,7 @@ if __name__ == "__main__":
 
         # Printing the bill numbers in the filtered bills
         print(
-            f"Bills dated from {since_date.date()} to " 
+            f"Bills dated from {since_date.date()} to "
             f"{until_date.date()} are:")
         for bill in bills_updated:
             print(bill["billNo"])
