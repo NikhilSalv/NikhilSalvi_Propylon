@@ -88,11 +88,13 @@ if __name__ == "__main__":
     start_time = datetime.now()
 
     # Example usage
-    pId = "MickBarry"
+    # pId = "MickBarry"
+    pId = input("Enter the pId of the member: ")
+
     results = filter_bills_sponsored_by(pId)
 
     if results:
-        logger.info("Bills sponsored by the member with given pId are fetched")
+        logger.info(f"Bills sponsored by the member with given pId '{pId}' are fetched")
         print("Bills sponsored by the member:")
         for bill in results:
             print(bill["billNo"])
