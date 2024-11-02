@@ -73,22 +73,6 @@ def fetch_data_from_api_with_cache(url):
         return None
 
 
-def fetch_data_from_api(url):
-    try:
-        # Send a GET request to the API
-        response = requests.get(url)
-        
-        # Raise an exception for HTTP errors
-        response.raise_for_status()
-        
-        # Parse the JSON response and return it
-        return response.json()
-    
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return None
-
-
 def create_members_dict(member_data):
     """Create a dictionary of member data for quick lookup"""
     return {member['member']['pId']: member['member']['fullName'] for member in member_data['results']}
@@ -190,10 +174,6 @@ if __name__ == "__main__":
     # Capture the start time
     start_time = datetime.now()
 
-    # Fetch member and legislation data
-    # mem = fetch_data_from_api(url_members)
-    # leg = fetch_data_from_api(url_legislation)
-
     mem = fetch_data_from_api_with_cache(url_members)
     leg = fetch_data_from_api_with_cache(url_legislation)
 
@@ -230,9 +210,9 @@ if __name__ == "__main__":
     since_date = datetime(2024, 9, 30)  # September 30, 2024
     until_date = datetime(2024, 11, 1) # November 1, 2024
 
-    # # Calling the function with the date range
-    # bills_updated = filter_bills_by_last_updated(since_date, until_date)
+    # Calling the function with the date range
+    bills_updated = filter_bills_by_last_updated(since_date, until_date)
 
-    # # Printing the bill numbers in the filtered bills
-    # for bill in bills_updated:
-    #     print(bill['billNo'])
+    # Printing the bill numbers in the filtered bills
+    for bill in bills_updated:
+        print(bill)
