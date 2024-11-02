@@ -5,9 +5,16 @@ Set of functions to query the Oireachtas API at
 https://api.oireachtas.ie/v1/
 """
 import os
+import logging
 import json
 import requests
 from datetime import datetime, date, timedelta
+
+# Configure logging
+logging.basicConfig(filename='logs.txt',  # Log file name
+                    level=logging.INFO,          # Log level
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 CACHE_EXPIRATION = timedelta(hours=1)  # Cache duration is one hour
@@ -24,6 +31,8 @@ def is_cache_valid(cache_time):
 
 def fetch_data_from_api_with_cache(url):
     """Fetch data from the API and use file-based caching."""
+    base_url = "https://api.oireachtas.ie/v1/"
+
     if url == url_members:
         cache_file = CACHE_MEMBERS_FILE
     elif url == url_legislation:
@@ -40,19 +49,19 @@ def fetch_data_from_api_with_cache(url):
         current_url = url.strip()
         cached_url = cached_data['url'].strip()
 
-        print(f"Current URL: '{current_url}'")
-        print(f"Cached URL: '{cached_url}'")
+        logger.info(f"Current URL: '{current_url}'")
+        logger.info(f"Cached URL: '{cached_url}'")
 
         if cached_url == current_url and is_cache_valid(
                 datetime.fromisoformat(cached_data['timestamp'])):
-            print("Using cached data.")
+            logger.info("Using cached data.")
             return cached_data['data']
         else:
-            print("Cache is expired or URL has changed. Fetching new data.")
+            logger.info("Cache is expired or URL has changed. Fetching new data.")
 
     # Fetch data from the API
     try:
-        print("Fetching data from API.")
+        logger.info("Fetching data from API.")
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()
@@ -68,7 +77,7 @@ def fetch_data_from_api_with_cache(url):
         return data
 
     except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
         return None
 
 
@@ -85,10 +94,12 @@ def filter_bills_sponsored_by(pId):
     :return: List of bill records sponsored by the member
     :rtype: list
     """
+
+    members_dict = create_members_dict(mem)
     sponsor_name = members_dict.get(pId)
 
     if not sponsor_name:
-        print(f"No member found with pId: {pId}")
+        logger.info(f"No member found with pId: {pId}")
         return []
 
     sponsored_bills = [
@@ -176,7 +187,7 @@ if __name__ == "__main__":
 
     if mem and leg:
         # Create a members dictionary once
-        members_dict = create_members_dict(mem)
+        # members_dict = create_members_dict(mem)
 
         # Example usage
         pId = "MickBarry"
@@ -190,7 +201,7 @@ if __name__ == "__main__":
             print(f"No bills found sponsored by member with pId: {pId}")
 
     else:
-        print("Failed to fetch the necessary data.")
+        logger.error("Failed to fetch the necessary data.")
 
     # Capture the finish time
     finish_time = datetime.now()
@@ -198,7 +209,7 @@ if __name__ == "__main__":
     # Calculate the duration
     duration = finish_time - start_time
 
-    print(f"Duration for the data fetching and query run: {duration}")
+    logger.info(f"Duration for the data fetching and query run: {duration}")
 
     """_____________________Task Three driver code________________"""
 

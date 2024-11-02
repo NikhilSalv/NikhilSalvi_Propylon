@@ -1,0 +1,10 @@
+2024-11-02 22:16:19,366 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-02 22:16:19,366 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-02 22:16:19,366 - INFO - Using cached data.
+2024-11-02 22:16:19,369 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:16:19,369 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:16:19,369 - INFO - Using cached data.
+2024-11-02 22:16:19,369 - INFO - Duration for the data fetching and query run: 0:00:00.004284
+2024-11-02 22:16:19,374 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:16:19,374 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-02 22:16:19,374 - INFO - Using cached data.
