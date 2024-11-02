@@ -26,7 +26,13 @@ def fetch_data_from_api(url):
         return None
 
 
-def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
+def create_members_dict(member_data):
+    """Create a dictionary of member data for quick lookup"""
+    return {member['member']['pId']: member['member']['fullName'] for member in member_data['results']}
+
+
+
+def filter_bills_sponsored_by(pId):
     """Return bills sponsored by the member with the specified pId
 
     :param str url_members: URL to fetch member data
@@ -36,16 +42,6 @@ def filter_bills_sponsored_by(url_members, url_legistaltion, pId):
     :rtype: list
     """
 
-    # Fetch member and legislation data
-    mem = fetch_data_from_api(url_members)
-    leg = fetch_data_from_api(url_legistaltion)
-
-    # Check if data was successfully fetched
-    if mem is None or leg is None:
-        return []
-
-    # Create a dictionary of members for quick lookup
-    members_dict = {member['member']['pId']: member['member']['fullName'] for member in mem['results']}
     sponsor_name = members_dict.get(pId)
 
     if not sponsor_name:
@@ -124,20 +120,28 @@ if __name__ == "__main__":
     pId : MickBarry
 
     """
-
-    pId = "MickBarry"
     
     # Define URLs for member and legislation data
     url_members = "https://api.oireachtas.ie/v1/members"
     url_legislation = "https://api.oireachtas.ie/v1/legislation"
 
-
-    print("____________________________Tasks One and Two implementation_________________________")
-    
     # Capture the start time
     start_time = datetime.now()
 
-    result = filter_bills_sponsored_by(url_members, url_legislation, pId)
+    # Fetch member and legislation data
+    mem = fetch_data_from_api(url_members)
+    leg = fetch_data_from_api(url_legislation)
+
+    if mem and leg:
+        # Create a members dictionary once
+        members_dict = create_members_dict(mem)
+        
+        # Example usage
+        pId = "CatherineArdagh"
+        result = filter_bills_sponsored_by(pId)
+        
+        for res in result:
+            print(res)
 
     # Capture the finish time
     finish_time = datetime.now()
@@ -145,22 +149,17 @@ if __name__ == "__main__":
     # Calculate the duration
     duration = finish_time - start_time
     
-    print(f"Duration: {duration}")
-
-    for res in result:
-        print(res["billNo"])
+    print(f"Duration for the data fetching and query run : {duration}")
 
     """____________________________Task Three driver code_________________________"""
-    
-    print("____________________________Task Three implementation_________________________")
     
     # Defining the date range for filtering
     since_date = datetime(2024, 9, 30)  # January 1, 2019
     until_date = datetime(2024, 11, 1) # December 31, 2019
 
-    # Calling the function with the date range
-    bills_updated = filter_bills_by_last_updated(since_date, until_date)
+    # # Calling the function with the date range
+    # bills_updated = filter_bills_by_last_updated(since_date, until_date)
 
-    # Printing the bill numbers in the filtered bills
-    for bill in bills_updated:
-        print(bill['billNo'])
+    # # Printing the bill numbers in the filtered bills
+    # for bill in bills_updated:
+    #     print(bill['billNo'])
