@@ -1,7 +1,10 @@
 # Interview Test - Oireachtas Api
 
+<img width="886" alt="cover" src="https://github.com/user-attachments/assets/68e03026-d05a-489f-afb1-c230d3a5a349">
+
 This project has a python module `oireachtas_api` which defines 3 functions to
 load and process a couple of the [Houses of the Oireachtas Open Data APIs][1].
+
 
 Specifically, they use the data obtained from the `legislation` and `members`
 api endpoints to answer the questions:
