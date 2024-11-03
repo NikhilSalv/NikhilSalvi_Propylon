@@ -22,11 +22,36 @@ def filter_bills_sponsored_by(pId):
     leg = fetch_data_from_api_with_cache("legislation")
 
     members_dict = create_members_dict(mem)
-    sponsor_name = members_dict.get(pId)
+    # sponsor_name = members_dict.get(pId)
+    # print(members_dict.keys())
 
-    if not sponsor_name:
-        logger.info(f"No member found with pId: {pId}")
-        return []
+    # Keep prompting the user for a valid pId until one is found or they choose to exit
+    while pId not in members_dict:
+        logger.error(f"No such member with given pId {pId}")
+        print(f"No such member with given pId '{pId}'. Please provide a valid pId or type 'exit' to quit.")
+        
+        # Prompt the user to re-enter the pId
+        pId = input("Enter a valid pId or enter 'exit' to exit the process: ")
+
+        if pId.lower() == 'exit':
+            print("Exiting the process...")
+            return []
+
+    # if pId in members_dict.keys():
+    #     logger.info("Member with given pId found")
+    #     sponsor_name = members_dict.get(pId)
+    # else:
+    #     logger.error(f"No such member with given pId {pId}")
+    #     print(f"No such member with given pId {pId}, Please provide valid pId")
+    #     return []
+
+    # if not sponsor_name:
+    #     logger.info(f"No member found with pId: {pId}")
+    #     return []
+
+    # At this point, a valid pId will be provided
+    logger.info("Member with given pId found")
+    sponsor_name = members_dict[pId]
 
     sponsored_bills = [
         bill['bill'] for bill in leg['results']
@@ -95,11 +120,9 @@ if __name__ == "__main__":
 
     if results:
         logger.info(f"Bills sponsored by the member with given pId '{pId}' are fetched")
-        print("Bills sponsored by the member:")
+        print("Bills sponsored by the member are:")
         for bill in results:
             print(bill["billNo"])
-    else:
-        print(f"No bills found sponsored by member with pId: {pId}")
 
     # Capture the finish time
     finish_time = datetime.now()

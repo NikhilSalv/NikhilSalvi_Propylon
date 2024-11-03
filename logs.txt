@@ -102,3 +102,128 @@
 2024-11-03 00:03:02,683 - INFO - No member found with pId: £££
 2024-11-03 00:03:02,684 - INFO - Duration for the data fetching and query run: 0:00:09.024862
 2024-11-03 00:03:10,415 - ERROR - Invalid date format
+2024-11-03 08:08:58,768 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:08:58,768 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:08:58,769 - INFO - Cache for members is expired or URL has changed.
+2024-11-03 08:08:58,769 - INFO - Fetching data from API members.
+2024-11-03 08:08:59,016 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:08:59,016 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:08:59,016 - INFO - Cache for legislation is expired or URL has changed.
+2024-11-03 08:08:59,016 - INFO - Fetching data from API legislation.
+2024-11-03 08:08:59,295 - INFO - No member found with pId: dff
+2024-11-03 08:08:59,295 - INFO - Duration for the data fetching and query run: 0:00:04.677797
+2024-11-03 08:09:49,404 - ERROR - Invalid date format
+2024-11-03 08:09:58,827 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:09:58,827 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:09:58,827 - INFO - Using cached data for members
+2024-11-03 08:09:58,834 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:09:58,834 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:09:58,835 - INFO - Using cached data for legislation
+2024-11-03 08:09:58,835 - INFO - No member found with pId: dvds
+2024-11-03 08:09:58,836 - INFO - Bills sponsored by the member with given pId 'dvds' are fetched
+2024-11-03 08:11:31,473 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:11:31,473 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:11:31,474 - INFO - Using cached data for members
+2024-11-03 08:11:31,481 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:11:31,481 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:11:31,481 - INFO - Using cached data for legislation
+2024-11-03 08:11:31,481 - INFO - No member found with pId: sdsd
+2024-11-03 08:11:31,482 - INFO - Duration for the data fetching and query run: 0:00:03.598860
+2024-11-03 08:12:46,749 - ERROR - Invalid date format
+2024-11-03 08:13:17,651 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:13:17,651 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:13:17,651 - INFO - Using cached data for members
+2024-11-03 08:13:17,659 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:13:17,659 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:13:17,659 - INFO - Using cached data for legislation
+2024-11-03 08:13:17,660 - INFO - Bills sponsored by the member with given pId 'MickBarry' are fetched
+2024-11-03 08:13:17,660 - INFO - Duration for the data fetching and query run: 0:00:29.010955
+2024-11-03 08:14:05,860 - ERROR - Invalid date format
+2024-11-03 08:14:11,553 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:14:11,553 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:14:11,553 - INFO - Using cached data for members
+2024-11-03 08:14:11,560 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:14:11,561 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:14:11,562 - INFO - Using cached data for legislation
+2024-11-03 08:14:11,565 - INFO - Bills sponsored by the member with given pId 'MickBarry' are fetched
+2024-11-03 08:14:11,565 - INFO - Duration for the data fetching and query run: 0:00:03.819234
+2024-11-03 08:18:35,338 - ERROR - Invalid date format
+2024-11-03 08:18:42,166 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:18:42,166 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:18:42,167 - INFO - Using cached data for members
+2024-11-03 08:18:42,173 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:18:42,174 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:18:42,174 - INFO - Using cached data for legislation
+2024-11-03 08:19:11,005 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:19:11,007 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:19:11,007 - INFO - Using cached data for members
+2024-11-03 08:19:11,015 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:19:11,015 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:19:11,015 - INFO - Using cached data for legislation
+2024-11-03 08:19:11,015 - ERROR - No such member with given pId ndfz
+2024-11-03 08:19:11,016 - INFO - Duration for the data fetching and query run: 0:00:01.542113
+2024-11-03 08:39:35,460 - ERROR - Invalid date format
+2024-11-03 08:39:41,976 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:39:41,976 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:39:41,977 - INFO - Using cached data for members
+2024-11-03 08:39:41,985 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:39:41,985 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:39:41,985 - INFO - Using cached data for legislation
+2024-11-03 08:39:41,985 - ERROR - No such member with given pId vdfz
+2024-11-03 08:39:46,950 - ERROR - No such member with given pId adf
+2024-11-03 08:39:55,851 - INFO - Duration for the data fetching and query run: 0:00:15.365183
+2024-11-03 08:42:29,335 - ERROR - Invalid date format
+2024-11-03 08:42:36,895 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:42:36,895 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:42:36,896 - INFO - Using cached data for members
+2024-11-03 08:42:36,903 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:42:36,904 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:42:36,904 - INFO - Using cached data for legislation
+2024-11-03 08:42:36,904 - ERROR - No such member with given pId sdf
+2024-11-03 08:42:43,115 - ERROR - No such member with given pId eixt
+2024-11-03 08:42:46,405 - INFO - Duration for the data fetching and query run: 0:00:11.224891
+2024-11-03 08:43:33,093 - ERROR - Invalid date format
+2024-11-03 08:43:36,348 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:43:36,349 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:43:36,349 - INFO - Using cached data for members
+2024-11-03 08:43:36,356 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:43:36,356 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:43:36,356 - INFO - Using cached data for legislation
+2024-11-03 08:43:36,356 - ERROR - No such member with given pId vfd
+2024-11-03 08:43:39,739 - ERROR - No such member with given pId dfds
+2024-11-03 08:43:44,459 - INFO - Duration for the data fetching and query run: 0:00:09.615044
+2024-11-03 08:44:11,055 - ERROR - Invalid date format
+2024-11-03 08:44:17,306 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:44:17,307 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:44:17,307 - INFO - Using cached data for members
+2024-11-03 08:44:17,315 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:44:17,315 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:44:17,315 - INFO - Using cached data for legislation
+2024-11-03 08:44:17,315 - ERROR - No such member with given pId [Af
+2024-11-03 08:44:32,414 - INFO - Member with given pId found
+2024-11-03 08:44:32,416 - INFO - Bills sponsored by the member with given pId '[Af' are fetched
+2024-11-03 08:44:32,416 - INFO - Duration for the data fetching and query run: 0:00:17.079401
+2024-11-03 08:45:16,210 - ERROR - Invalid date format
+2024-11-03 08:45:40,278 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:45:40,279 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:45:40,279 - INFO - Using cached data for members
+2024-11-03 08:45:40,287 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:45:40,287 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:45:40,287 - INFO - Using cached data for legislation
+2024-11-03 08:45:40,287 - INFO - Member with given pId found
+2024-11-03 08:45:40,288 - INFO - Bills sponsored by the member with given pId 'MickBarry' are fetched
+2024-11-03 08:45:40,288 - INFO - Duration for the data fetching and query run: 0:00:10.823619
+2024-11-03 08:45:57,661 - ERROR - Invalid date format
+2024-11-03 08:46:14,458 - INFO - Current URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:46:14,458 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/members'
+2024-11-03 08:46:14,458 - INFO - Using cached data for members
+2024-11-03 08:46:14,466 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:46:14,466 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:46:14,466 - INFO - Using cached data for legislation
+2024-11-03 08:46:14,466 - INFO - Member with given pId found
+2024-11-03 08:46:14,467 - INFO - Bills sponsored by the member with given pId 'MickBarry' are fetched
+2024-11-03 08:46:14,468 - INFO - Duration for the data fetching and query run: 0:00:05.762972
+2024-11-03 08:46:53,160 - INFO - Current URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:46:53,160 - INFO - Cached URL: 'https://api.oireachtas.ie/v1/legislation'
+2024-11-03 08:46:53,160 - INFO - Using cached data for legislation
+2024-11-03 08:46:53,161 - INFO - Bills between 2024-09-30 and 2024-12-02 are fetched
