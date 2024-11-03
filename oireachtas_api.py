@@ -8,7 +8,9 @@ https://api.oireachtas.ie/v1/
 
 from datetime import datetime, date
 from utils import fetch_data_from_api_with_cache, create_members_dict,validate_date_range,get_valid_date_input,logger
+from json import *
 
+load = lambda jfname: loads(open(jfname).read())
 
 def filter_bills_sponsored_by(pId):
     """Return bills sponsored by the member with the specified pId.
@@ -77,7 +79,6 @@ def filter_bills_by_last_updated(since_date_str, until_date_str):
 
     since, until = validate_date_range(since, until)
 
-
     # Initialize an empty list to hold bills that match the criteria
     filtered_bills = []
 
@@ -134,7 +135,7 @@ if __name__ == "__main__":
         if bills_updated:
             logger.info(f"Bills between are fetched")
             print(
-                f"Bills in the range are:")
+                f"Bills in the given date range are:")
             for bill in bills_updated:
                 print(bill["billNo"]) # Remove ["billNo"] to return entire details of the bills
     except ValueError as e:
