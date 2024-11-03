@@ -109,7 +109,7 @@ def validate_dates(since, until):
     :param until: The ending date of the range, should be a datetime or date object.
     :type until: datetime or date
     :raises ValueError: If the provided `since` or `until` is not a valid date or datetime instance, 
-                        or if `since` is later than `until`.
+    or if `since` is later than `until`.
     :return: None
     """
     # Ensure both dates are either datetime or date instances

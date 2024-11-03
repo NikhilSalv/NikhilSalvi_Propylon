@@ -110,12 +110,22 @@ if __name__ == "__main__":
 
     """_____________________Task Three driver code________________"""
 
-    # Defining the date range for filtering
-    since_date = datetime(2024, 9, 30)
-    until_date = datetime(2024, 11, 1)
+    # # Defining the date range for filtering
+    # since_date = datetime(2024, 9, 30)
+    # until_date = datetime(2024, 11, 1)
+
+    since_date_str = input("Enter the 'since' date (YYYY-MM-DD): ")
+    until_date_str = input("Enter the 'until' date (YYYY-MM-DD): ")
+
+    # Convert the input strings to datetime objects
+    
 
     try:
         # Validate the dates before calling the function
+        since_date = datetime.strptime(since_date_str, "%Y-%m-%d")
+        until_date = datetime.strptime(until_date_str, "%Y-%m-%d")
+
+
         validate_dates(since_date, until_date)
 
         # Calling the function with the date range
