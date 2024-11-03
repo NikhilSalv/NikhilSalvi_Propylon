@@ -101,7 +101,30 @@ def create_members_dict(member_data):
             for member in member_data['results']}
 
 
-def validate_dates(since, until):
+def get_valid_date_input(prompt):
+    """Prompt the user for a date input and validate its format.
+
+    :param prompt: The input prompt message to show to the user.
+    :type prompt: str
+    :return: A valid datetime object or None if the user exits.
+    :rtype: datetime or None
+    """
+    while True:
+        user_input = prompt
+        if not user_input:
+            until = date.today()
+            return until
+        if user_input.lower() == 'exit':
+            logger.warning("User exited the function 'filter_bills_by_last_updated'")
+            return None
+        try:
+            valid_date = datetime.strptime(user_input, "%Y-%m-%d").date()
+            return valid_date
+        except ValueError:
+            prompt  = input("Invalid date format. Please enter the date in YYYY-MM-DD format or type 'exit' to quit: ")
+
+
+def validate_date_range(since, until):
     """Validate and sanitize date inputs to ensure they are in the correct format and logical order.
 
     :param since: The starting date of the range, should be a datetime or date object.
@@ -112,17 +135,11 @@ def validate_dates(since, until):
     or if `since` is later than `until`.
     :return: None
     """
-    # Ensure both dates are either datetime or date instances
-    if not isinstance(since, (datetime, date)):
-        raise ValueError(
-            f"Invalid since date: {since}. Must be a datetime or date object.")
-    if not isinstance(until, (datetime, date)):
-        raise ValueError(
-            f"Invalid until date: {until}. Must be a datetime or date object.")
-
     # Ensure since is not after until
-    if since > until:
+    if since >= until:
         logger.warning("Invalid date range")
         raise ValueError(
-            f"Invalid date range: 'since' date {since} "
-            f"cannot be after 'until' date {until}.")
+            f"Invalid date range: 'since' date ({since}) "
+            f"cannot be after or equal to 'until' date ({until}).")
+    else:
+        return since, until

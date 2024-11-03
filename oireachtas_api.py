@@ -7,7 +7,7 @@ https://api.oireachtas.ie/v1/
 
 
 from datetime import datetime, date
-from utils import fetch_data_from_api_with_cache, create_members_dict,validate_dates, logger
+from utils import fetch_data_from_api_with_cache, create_members_dict,validate_date_range,get_valid_date_input,logger
 
 
 def filter_bills_sponsored_by(pId):
@@ -22,8 +22,7 @@ def filter_bills_sponsored_by(pId):
     leg = fetch_data_from_api_with_cache("legislation")
 
     members_dict = create_members_dict(mem)
-    # sponsor_name = members_dict.get(pId)
-    # print(members_dict.keys())
+    # print(members_dict)
 
     # Keep prompting the user for a valid pId until one is found or they choose to exit
     while pId not in members_dict:
@@ -36,18 +35,6 @@ def filter_bills_sponsored_by(pId):
         if pId.lower() == 'exit':
             print("Exiting the process...")
             return []
-
-    # if pId in members_dict.keys():
-    #     logger.info("Member with given pId found")
-    #     sponsor_name = members_dict.get(pId)
-    # else:
-    #     logger.error(f"No such member with given pId {pId}")
-    #     print(f"No such member with given pId {pId}, Please provide valid pId")
-    #     return []
-
-    # if not sponsor_name:
-    #     logger.info(f"No member found with pId: {pId}")
-    #     return []
 
     # At this point, a valid pId will be provided
     logger.info("Member with given pId found")
@@ -62,7 +49,7 @@ def filter_bills_sponsored_by(pId):
     return sponsored_bills
 
 
-def filter_bills_by_last_updated(since, until):
+def filter_bills_by_last_updated(since_date_str, until_date_str):
     """Return bills updated within the specified date range.
 
     :param datetime.date since: The lastUpdated value for the bill
@@ -80,12 +67,16 @@ def filter_bills_by_last_updated(since, until):
     if leg is None:
         return []
 
-    if until is None:
-        until = date.today()
+    since = get_valid_date_input(since_date_str)
+    until = get_valid_date_input(until_date_str)
 
-    # Convert input dates to datetime.date if they are not already
-    since = since.date() if isinstance(since, datetime) else since
-    until = until.date() if isinstance(until, datetime) else until
+    if not since or not until:
+        logger.warning("Exiting the function 'filter_bills_by_last_updated'")
+        print("Exiting the function")
+        return None
+
+    since, until = validate_date_range(since, until)
+
 
     # Initialize an empty list to hold bills that match the criteria
     filtered_bills = []
@@ -110,11 +101,9 @@ if __name__ == "__main__":
     """_______________Tasks One and Two driver code_____________"""
 
     # Capture the start time
-    start_time = datetime.now()
+    # start_time = datetime.now()
 
-    # Example usage
-    # pId = "MickBarry"
-    pId = input("Enter the pId of the member: ")
+    pId = input("Enter the pId of the member: ") # "CatherineArdagh" and "MickBarry" have sponsored some bills
 
     results = filter_bills_sponsored_by(pId)
 
@@ -122,46 +111,32 @@ if __name__ == "__main__":
         logger.info(f"Bills sponsored by the member with given pId '{pId}' are fetched")
         print("Bills sponsored by the member are:")
         for bill in results:
-            print(bill["billNo"])
+            print(bill["billNo"]) # Remove ["billNo"] to return entire details of the bills
 
-    # Capture the finish time
-    finish_time = datetime.now()
+    # # Capture the finish time
+    # finish_time = datetime.now()
 
-    # Calculate the duration
-    duration = finish_time - start_time
-    logger.info(f"Duration for the data fetching and query run: {duration}")
+    # # Calculate the duration
+    # duration = finish_time - start_time
+    # logger.info(f"Duration for the data fetching and query run: {duration}")
 
     """_____________________Task Three driver code________________"""
 
-    # # Defining the date range for filtering
-    # since_date = datetime(2024, 9, 30)
-    # until_date = datetime(2024, 11, 1)
-
     since_date_str = input("Enter the 'since' date (YYYY-MM-DD): ")
-    until_date_str = input("Enter the 'until' date (YYYY-MM-DD): ")
-
-    # Convert the input strings to datetime objects
-    
+    until_date_str = input("Enter the 'until' date (YYYY-MM-DD) or press enter to fetch data till date: ")
 
     try:
-        # Validate the dates before calling the function
-        since_date = datetime.strptime(since_date_str, "%Y-%m-%d")
-        until_date = datetime.strptime(until_date_str, "%Y-%m-%d")
-
-
-        validate_dates(since_date, until_date)
 
         # Calling the function with the date range
-        bills_updated = filter_bills_by_last_updated(since_date, until_date)
+        bills_updated = filter_bills_by_last_updated(since_date_str, until_date_str)
 
         # Printing the bill numbers in the filtered bills
         if bills_updated:
-            logger.info(f"Bills between {since_date.date()} and {until_date.date()} are fetched")
+            logger.info(f"Bills between are fetched")
             print(
-                f"Bills dated from {since_date.date()} to "
-                f"{until_date.date()} are:")
+                f"Bills in the range are:")
             for bill in bills_updated:
-                print(bill["billNo"])
+                print(bill["billNo"]) # Remove ["billNo"] to return entire details of the bills
     except ValueError as e:
         logger.error("Invalid date format")
         print(f"Error: {e}")
