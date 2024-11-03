@@ -113,7 +113,7 @@ if __name__ == "__main__":
 
     if results:
         logger.info(f"Bills sponsored by the member with given pId '{pId}' are fetched")
-        print("Bills sponsored by the member are:")
+        print("Bills sponsored by the member are (By bill numbers):")
         for bill in results:
             print(bill["billNo"]) # Remove ["billNo"] to return entire details of the bills
 
@@ -138,7 +138,7 @@ if __name__ == "__main__":
         if bills_updated:
             logger.info(f"Bills between are fetched")
             print(
-                f"Bills in the given date range are:")
+                f"Bills in the given date range are (By bill numbers) :")
             for bill in bills_updated:
                 print(bill["billNo"]) # Remove ["billNo"] to return entire details of the bills
     except ValueError as e:
