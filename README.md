@@ -1,12 +1,25 @@
 # Interview Test - Oireachtas Api
 
+
 <img width="886" alt="cover" src="https://github.com/user-attachments/assets/68e03026-d05a-489f-afb1-c230d3a5a349">
+
+# Key Achievements :
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/0af49d47-e4bb-43b4-bfd2-991441333602" alt="Key Achievements" />
+</p>
+
 
 ## Content
 - [Assessment Goals](#assessment-goals)
 - [User Stories](#user-stories)
     - [Filter Bills Sponsored by a Member](#filter-bills-sponsored-by-a-member)
     - [Filter Bills by Last Updated Date Range](#filter-bills-by-last-updated-date-range)
+- [Design and flow](#design-and-flow)
+- [Testing write-ups](#testing-write-ups)
+    - [PEP8 Validator](#PEP-8-validator)
+    - [Unit Testing](#unit-testing)
+    - [Logs](#logs)
 
 
 ## Assessment goals
@@ -96,4 +109,153 @@ so that I can analyze the contributions and legislative activities of that membe
 - When the lastUpdated dates of bills are checked,
 - Then the function returns a list of bills updated between January 1, 2024, and June 1, 2024.
 - If the since_date_str is invalid or no valid data is fetched, the function exits and returns None.
+
+## Design and flow
+
+                Start
+                  |
+         Enter pId of member
+                  |
+                  v
+      +----------------------------------------+
+      |  Call filter_bills_sponsored_by(pId)   |
+      +----------------------------------------+
+                  |
+         Valid pId? (Check)
+        /               \
+      Yes               No
+      |                  |
+      v                  v
+    Fetch bills     Log error: "No such member..."
+    sponsored by    Prompt for valid pId or exit
+    the member      (Repeat loop)
+      |
+      v
+    Display bills 
+    (bill numbers)
+      |
+      v
+    Enter 'since' 
+    and 'until' dates
+      |
+      v
+    Call filter_bills_by_last_updated(since_date_str, until_date_str)
+      |
+      v
+    Validate dates
+      |
+      v
+    Filter bills 
+    updated within date range
+      |
+      v
+    Display filtered bills
+    (bill numbers)
+      |
+      v
+    End
+
+1. #### filter_bills_sponsored_by(pId: str)
+
+**Purpose:** 
+
+This function retrieves bills sponsored by a specific member identified by their unique member ID (pId). It allows users to understand legislative actions tied to individual members.
+
+**Flow:**
+
+- **Fetch Data:**
+
+> The function starts by calling fetch_data_from_api_with_cache to obtain member and legislation data from the Oireachtas API.
+> It creates a dictionary mapping member IDs to their names using create_members_dict.
+
+- **Input Validation:**
+
+> A loop is initiated to check if the provided pId exists in the members_dict.
+> If the pId is invalid, the user is prompted to enter a valid ID or exit the process. If the user chooses to exit, the function returns an empty list.
+> Upon successful validation, it logs the member ID found.
+
+- **Filter Bills:**
+
+> The function then iterates through the legislation results to collect bills that are sponsored by the identified member.
+> It checks if the member's name appears in the sponsors of each bill.
+> The filtered list of bills is returned.
+
+- **Output:**
+
+> The result is a list of dictionaries containing details about the bills sponsored by the member.
+
+2. #### filter_bills_by_last_updated(since_date_str: str, until_date_str: Optional[str] = None)
+
+**Purpose:** 
+
+This function filters and returns bills that have been updated within a specified date range. It is essential for tracking recent legislative changes.
+
+**Flow:**
+
+- **Fetch Legislation Data:**
+
+> The function retrieves legislation data using fetch_data_from_api_with_cache.
+> It checks if the data was successfully fetched; if not, it returns an empty list.
+
+- **Date Input Handling:**
+
+> The function calls get_valid_date_input for both since_date_str and until_date_str to convert user inputs into date objects.
+> If the inputs are invalid, it logs a warning and returns None.
+
+- **Validate Date Range:**
+
+> The dates are validated using validate_date_range, which checks that the 'since' date is not later than the 'until' date.
+> If the date range is invalid, a ValueError is raised.
+
+- **Filter Bills:**
+
+> The function initializes an empty list to store bills that match the criteria.
+> It iterates through the legislation results, converting the lastUpdated string of each bill into a datetime.date object.
+> Each bill is checked to see if its lastUpdated date falls within the specified date range. Matching bills are appended to the filtered list.
+
+- **Output:**
+
+> The function returns the list of bills updated within the specified date range.
+
+
+## Testing write-ups
+
+- **PEP 8 validator**
+
+<p align="center">
+<img width="1397" alt="PEP8" src="https://github.com/user-attachments/assets/c7b97a7c-fcc1-41c2-8153-6cea389b907b">
+</p>
+
+
+<p align="center">
+<img width="1348" alt="PEP 8 Fixed" src="https://github.com/user-attachments/assets/e968c1ed-167b-499a-b881-d9240226cf9e" width= "10">
+</p>
+
+
+- **Unit testing**
+
+<p align="center">
+<img width="785" alt="unit testing" src="https://github.com/user-attachments/assets/b32e58bb-ab91-45e6-90ab-a96a40b1d62d">
+</p>
+
+- ### test_create_members_dict:
+> **Purpose:** This test checks the functionality of the create_members_dict function. It validates whether the function correctly transforms the input member_data into the expected dictionary format.
+> **Process:**
+-A sample member_data dictionary is created with a couple of members.
+-The expected output dictionary is defined.
+-The function create_members_dict is called with member_data, and its result is compared against the expected output using self.assertEqual(). If they match, the test passes; if not, it fails.
+
+- ### test_validate_date_range:
+
+> **Purpose:** This test verifies that the validate_date_range function correctly handles date range validation.
+> **Process:**
+-Two datetime objects, since and until, are defined.
+-The function is called with these dates, and the result is checked to ensure it returns the same dates as a tuple.
+-The test also checks that a ValueError is raised when an invalid date range is provided (i.e., when since is later than until).
+
+- **Logs**
+<p align="center">
+<img width="840" alt="Logs" src="https://github.com/user-attachments/assets/eee2f942-4374-4a50-ae04-2c7c474c146f">
+</p>
+
 
