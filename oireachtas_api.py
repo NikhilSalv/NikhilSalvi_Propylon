@@ -115,12 +115,12 @@ if __name__ == "__main__":
         logger.info(f"Bills sponsored by the member with given pId '{pId}' are fetched")
         print("Bills sponsored by the member are (By bill numbers):")
         for bill in results:
-            print(bill["billNo"]) # Remove ["billNo"] to return entire details of the bills
+            print(bill)
 
-    # # Capture the finish time
+    # Capture the finish time
     # finish_time = datetime.now()
 
-    # # Calculate the duration
+    # Calculate the duration
     # duration = finish_time - start_time
     # logger.info(f"Duration for the data fetching and query run: {duration}")
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
             print(
                 f"Bills in the given date range are (By bill numbers) :")
             for bill in bills_updated:
-                print(bill["billNo"]) # Remove ["billNo"] to return entire details of the bills
+                print(bill["billNo"]) # Remove ["billNo"] to print entire details of the bills
     except ValueError as e:
         logger.error("Invalid date format")
         print(f"Error: {e}")
