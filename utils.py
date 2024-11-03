@@ -3,6 +3,7 @@ import logging
 import json
 import requests
 from datetime import datetime, date, timedelta
+from typing import Optional, Dict, Union
 
 
 # Configure logging
@@ -22,7 +23,7 @@ url_mapping = {
 }
 
 
-def is_cache_valid(cache_time):
+def is_cache_valid(cache_time: datetime) -> bool:
     """Check if the cache is still valid based on the expiration duration.
 
     :param datetime cache_time: The timestamp of when the cache was created, as a datetime object.
@@ -33,7 +34,7 @@ def is_cache_valid(cache_time):
     return current_time - cache_time < CACHE_EXPIRATION
 
 
-def fetch_data_from_api_with_cache(data_type):
+def fetch_data_from_api_with_cache(data_type: str) -> Optional[Union[Dict, list]]:
     """Fetch data from the API and use file-based caching to avoid repeated requests.
 
     :param str data_type: The type of data to fetch (e.g., 'members' or 'legislation').
@@ -90,7 +91,7 @@ def fetch_data_from_api_with_cache(data_type):
         return None
 
 
-def create_members_dict(member_data):
+def create_members_dict(member_data: Dict) -> Dict[str, str]:
     """Create a dictionary of member data for quick lookup by member ID.
 
     :param dict member_data: The data containing member details, typically a response from the API.
@@ -101,7 +102,7 @@ def create_members_dict(member_data):
             for member in member_data['results']}
 
 
-def get_valid_date_input(prompt):
+def get_valid_date_input(prompt: str) -> Optional[date]:
     """Prompt the user for a date input and validate its format.
 
     :param prompt: The input prompt message to show to the user.
@@ -124,7 +125,7 @@ def get_valid_date_input(prompt):
             prompt  = input("Invalid date format. Please enter the date in YYYY-MM-DD format or type 'exit' to quit: ")
 
 
-def validate_date_range(since, until):
+def validate_date_range(since: Union[datetime, date], until: Union[datetime, date]) -> Optional[tuple[Union[datetime, date], Union[datetime, date]]]:
     """Validate and sanitize date inputs to ensure they are in the correct format and logical order.
 
     :param since: The starting date of the range, should be a datetime or date object.

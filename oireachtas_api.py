@@ -9,10 +9,11 @@ https://api.oireachtas.ie/v1/
 from datetime import datetime, date
 from utils import fetch_data_from_api_with_cache, create_members_dict,validate_date_range,get_valid_date_input,logger
 from json import *
+from typing import List, Optional, Union
 
 load = lambda jfname: loads(open(jfname).read())
 
-def filter_bills_sponsored_by(pId):
+def filter_bills_sponsored_by(pId: str) -> List[dict]:
     """Return bills sponsored by the member with the specified pId.
 
     :param str pId: The pId value for the member
@@ -51,7 +52,9 @@ def filter_bills_sponsored_by(pId):
     return sponsored_bills
 
 
-def filter_bills_by_last_updated(since_date_str, until_date_str):
+def filter_bills_by_last_updated(since_date_str: str,
+    until_date_str: Optional[str] = None
+) -> Optional[List[dict]]:
     """Return bills updated within the specified date range.
 
     :param datetime.date since: The lastUpdated value for the bill
@@ -104,9 +107,9 @@ if __name__ == "__main__":
     # Capture the start time
     # start_time = datetime.now()
 
-    pId = input("Enter the pId of the member: ") # "CatherineArdagh" and "MickBarry" have sponsored some bills
+    pId: str = input("Enter the pId of the member: ") # "CatherineArdagh" and "MickBarry" have sponsored some bills
 
-    results = filter_bills_sponsored_by(pId)
+    results: List[dict] = filter_bills_sponsored_by(pId)
 
     if results:
         logger.info(f"Bills sponsored by the member with given pId '{pId}' are fetched")
@@ -123,13 +126,13 @@ if __name__ == "__main__":
 
     """_____________________Task Three driver code________________"""
 
-    since_date_str = input("Enter the 'since' date (YYYY-MM-DD): ")
-    until_date_str = input("Enter the 'until' date (YYYY-MM-DD) or press enter to fetch data till date: ")
+    since_date_str: str = input("Enter the 'since' date (YYYY-MM-DD): ")
+    until_date_str: Optional[str] = input("Enter the 'until' date (YYYY-MM-DD) or press enter to fetch data till date: ")
 
     try:
 
         # Calling the function with the date range
-        bills_updated = filter_bills_by_last_updated(since_date_str, until_date_str)
+        bills_updated: Optional[List[dict]] = filter_bills_by_last_updated(since_date_str, until_date_str)
 
         # Printing the bill numbers in the filtered bills
         if bills_updated:
