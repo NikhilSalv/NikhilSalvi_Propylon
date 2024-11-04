@@ -116,6 +116,8 @@ if __name__ == "__main__":
         print("Bills sponsored by the member are (By bill numbers):")
         for bill in results:
             print(bill)
+    else:
+        print("No Bills are sponsored by the given pId membergimember")
 
     # Capture the finish time
     # finish_time = datetime.now()
