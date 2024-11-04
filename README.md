@@ -16,11 +16,15 @@
     - [Filter Bills Sponsored by a Member](#filter-bills-sponsored-by-a-member)
     - [Filter Bills by Last Updated Date Range](#filter-bills-by-last-updated-date-range)
 - [Design and flow](#design-and-flow)
+- [Implementation details](#implementation-details)
+  - [Optimisation](#optimisation)
+  - [Utils.py](#utils.py)
 - [Testing write-ups](#testing-write-ups)
     - [PEP8 Validator](#PEP-8-validator)
     - [Unit Testing](#unit-testing)
     - [Logs](#logs)
-
+- [Future Implementations](#Future-Implementation)
+    - [ERD Mapping](#Entity-Relation-Mapping)
 
 ## Assessment goals
 
@@ -112,7 +116,7 @@ so that I can analyze the contributions and legislative activities of that membe
 
 ## Design and flow
 
-                Start
+              Start
                   |
          Enter pId of member
                   |
@@ -302,4 +306,26 @@ until (Union[datetime, date]): The ending date. | Optional[tuple[Union[datetime,
 <img width="840" alt="Logs" src="https://github.com/user-attachments/assets/eee2f942-4374-4a50-ae04-2c7c474c146f">
 </p>
 
+## Future Implementation 
+
+#### Entity Relation Mapping
+
+> - Creating a Relational Database Management System (RDBMS) to store and manage the JSON data obtained from an API can optimize data retrieval for several reasons:
+
+> 1. Structured Query Language (SQL) for Efficient Retrieval:
+SQL allows for precise and optimized querying of data. Unlike traversing raw JSON, SQL queries can filter, join, aggregate, and sort data efficiently, enabling complex data retrieval with minimal computation.
+> 2. Indexing for Faster Searches:
+RDBMS allows you to create indexes on columns, which can drastically speed up data retrieval. Indexes help the database engine find rows faster without scanning the entire table, leading to improved read performance compared to searching through JSON structures.
+> 3. Data Integrity and Consistency:
+RDBMS enforces data integrity through constraints like primary keys, foreign keys, and unique constraints. This ensures data consistency, which can be difficult to maintain in unstructured JSON, leading to a more reliable and accurate dataset for retrieval.
+> 4. Optimized Storage and Normalization:
+Data in an RDBMS can be normalized, breaking down the JSON into related tables. This reduces data redundancy and ensures efficient storage. It also enables better organization and scalability, making it easier to manage data relationships and retrieve specific elements quickly.
+
+
+    [Member] -----< (N) [Membership] >----- (1) [House]
+       |                              |
+       |                              |  
+       |                              >----- (1) [Party]
+       |
+       >-----< (N) [Membership] >----- (1) [Constituency]
 
