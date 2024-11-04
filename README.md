@@ -67,7 +67,7 @@ Wish you the best of luck !
 ### Filter Bills Sponsored by a Member
 
 
-> <img width="891" alt="User story one" src="https://github.com/user-attachments/assets/e5873cda-8a2d-4fa7-ae32-8fd6958090d0" width="50">
+ <img width="891" alt="User story one" src="https://github.com/user-attachments/assets/e5873cda-8a2d-4fa7-ae32-8fd6958090d0" width="50">
 
 
 - As a user of the legislative data system, I want to retrieve a list of bills sponsored by a specific member using their unique pId,
@@ -216,6 +216,50 @@ This function filters and returns bills that have been updated within a specifie
 - **Output:**
 
 > The function returns the list of bills updated within the specified date range.
+
+
+## Implementation details
+
+- **Optimisation**
+
+- **filter_bills_sponsored_by(pId: str)**
+- **Purpose:**
+> This function retrieves bills sponsored by a specific member identified by their unique member ID (pId). It allows users to understand legislative actions tied to individual members.
+
+-  **Flow:**
+
+- - **Fetch Data:**
+
+> The function starts by calling fetch_data_from_api_with_cache to obtain member and legislation data from the Oireachtas API.
+It creates a dictionary mapping member IDs to their names using create_members_dict.
+Input Validation:
+
+> A loop is initiated to check if the provided pId exists in the members_dict.
+If the pId is invalid, the user is prompted to enter a valid ID or exit the process. If the user chooses to exit, the function returns an empty list.
+Upon successful validation, it logs the member ID found.
+
+- - **Filter Bills:**
+
+> The function then iterates through the legislation results to collect bills that are sponsored by the identified member.
+It checks if the member's name appears in the sponsors of each bill.
+The filtered list of bills is returned.
+
+- - **Output:**
+
+> The result is a list of dictionaries containing details about the bills sponsored by the member.
+
+
+- **Utils.py**
+
+| Function | Purpose | Input Parameters | Output |
+| --- | --- | --- | --- |
+| is_cache_valid | Checks if the cache is still valid based on a set expiration time. |cache_time (datetime): The timestamp when the cache was created. | bool: Returns True if the cache is valid, False otherwise. |
+| fetch_data_from_api_with_cache| Fetches data from an API with caching to avoid repeated requests. Checks if the cache is valid and either loads data from it or fetches new data. | data_type (str): The type of data to fetch (e.g., 'members', 'legislation'). | Optional[Union[Dict, list]]: Returns data from the cache or the API, or None if an error occurs. |
+| create_members_dict | Creates a dictionary from member data for quick lookup by member ID | member_data (Dict): Data containing member details, usually from an API response. | Dict[str, str]: A dictionary with member IDs (pId) as keys and member full names as values. |
+| get_valid_date_input | Prompts the user for a date input and validates the format, or returns today's date if no input is provided. | prompt (str): The message to prompt the user. | Optional[date]: Returns a valid date object or None if the user exits. |
+| validate_date_range | Validates and ensures that the date inputs are in the correct format and logical order. | since (Union[datetime, date]): The starting date.
+until (Union[datetime, date]): The ending date. | Optional[tuple[Union[datetime, date], Union[datetime, date]]]: Returns a tuple of the validated dates or raises ValueError if invalid. |
+
 
 
 ## Testing write-ups
