@@ -43,20 +43,26 @@ class TestUtils(unittest.TestCase):
             validate_date_range(datetime(2023, 11, 4), until)
 
 
-# class TestOireachtasAPI(unittest.TestCase):
-
-#     @patch('oireachtas_api.fetch_data_from_api_with_cache')
-#     def test_filter_bills_by_last_updated(self, mock_fetch_data):
-#         mock_fetch_data.return_value = {'results': [{'bill': {'lastUpdated': '2019-01-01', 'billNo': 'B1'}},
-#                                                       {'bill': {'lastUpdated': '2018-12-15', 'billNo': 'B2'}},
-#                                                       {'bill': {'lastUpdated': '2019-01-05', 'billNo': 'B3'}}]}
-#         since_date_str = datetime(2018, 12, 1)
-#         until_date_str = datetime(2019, 1, 1)
-
-#         result = filter_bills_by_last_updated(since_date_str, until_date_str)
-#         expected = [{'bill': {'lastUpdated': '2019-01-01', 'billNo': 'B1'}},
-#                      {'bill': {'lastUpdated': '2018-12-15', 'billNo': 'B2'}}]
-#         self.assertEqual(result, expected)
+class TestOireachtasAPI(unittest.TestCase):
+    @patch('oireachtas_api.fetch_data_from_api_with_cache')
+    @patch('oireachtas_api.create_members_dict')
+    def test_returns_non_empty_list_for_valid_pId(self, mock_create_members_dict, mock_fetch_data_from_api):
+        # Mock data for members and legislation
+        mock_create_members_dict.return_value = {'MickBarry': 'Mick Barry'}
+        mock_fetch_data_from_api.side_effect = [
+            {'results': [{'id': 'MickBarry'}]},  # mock return for members data
+            {'results': [
+                {'bill': {'sponsors': [{'sponsor': {'by': {'showAs': 'Mick Barry'}}}]}},
+                {'bill': {'sponsors': [{'sponsor': {'by': {'showAs': 'Mick Barry'}}}]}}
+            ]}  # mock return for legislation data with multiple matches
+        ]
+        
+        # Call the function with a valid pId
+        result = filter_bills_sponsored_by("MickBarry")
+        # Assert the result is not empty
+        self.assertNotEqual(result, [])
+        # Optionally, assert the length of the list
+        self.assertGreater(len(result), 0)
 
 
 

@@ -419,3 +419,13 @@
 2024-11-04 11:00:20,989 - INFO - Using cached data for legislation
 2024-11-04 11:00:20,989 - WARNING - Invalid date range
 2024-11-04 11:00:20,989 - ERROR - Invalid date format
+2024-11-04 11:05:30,036 - WARNING - Invalid date range
+2024-11-04 11:07:08,251 - WARNING - Invalid date range
+2024-11-04 11:08:02,113 - ERROR - No such member with given pId HenryJJAbbott
+2024-11-04 11:09:55,988 - WARNING - Invalid date range
+2024-11-04 11:10:08,899 - INFO - Member with given pId found
+2024-11-04 11:10:08,900 - WARNING - Invalid date range
+2024-11-04 11:11:10,993 - INFO - Member with given pId found
+2024-11-04 11:11:10,993 - WARNING - Invalid date range
+2024-11-04 11:18:59,846 - INFO - Member with given pId found
+2024-11-04 11:18:59,847 - WARNING - Invalid date range
